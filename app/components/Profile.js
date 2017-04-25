@@ -10,7 +10,7 @@ export default class Profile extends React.Component{
 
     render() {
         return ( 
-            <h1>{{this.profile.name}}</h1>
+            <h1>You are logged in now</h1>
         )
     }
 }

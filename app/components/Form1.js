@@ -1,12 +1,16 @@
 import React from 'react';
 import Axios from 'axios';
 import styles from '../styles/App.css';
-import { browserHistory , Router} from 'react-router';
+import {Home} from "./Home";
+import { browserHistory , Router, Redirect} from 'react-router';
+import history from './history'
 export default class Form1 extends React.Component{
-    constructor(props) {
+    constructor(props, context) {
         super(props);
-        this.state = {name: '' , email:'', password:'', confirm_password:''};
+        this.context = context;
+        this.state = {name: '' , email:'', password:'', confirm_password:'', redirect:false};
         this.handleSubmit = this.handleSubmit.bind(this);
+        
     }
 
     setValue(field, event) {
@@ -20,7 +24,9 @@ export default class Form1 extends React.Component{
         browserHistory.push('/');
     }
 
+
     handleSubmit(e) {
+        let self = this;
         e.preventDefault();
         var body = {
             name:this.state.name,
@@ -29,19 +35,25 @@ export default class Form1 extends React.Component{
             confirm_password:this.state.confirm_password
         }
         Axios.post('http://localhost:1339/signup' , body)
-          .then(function (response) {
-            Router.transitionTo('/')
+          .then((response)=> {
+                console.log(this.state ,"this is state")
+                this.setState({ redirect: true });
+
           })
-          .catch(function (err) {
+          .catch( (err)=> {
             console.log(err);
           });
-        console.log(this.state);
   }
 
 
   
 
     render() {
+
+          
+         if (this.state.redirect) {
+           return(<Home / >)
+         }
         return ( 
             <form onSubmit={this.handleSubmit}>
                 <div class="form-group">
